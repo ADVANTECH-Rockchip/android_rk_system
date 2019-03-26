@@ -860,7 +860,7 @@ static void export_kernel_boot_props() {
         const char *dst_prop;
         const char *default_value;
     } prop_map[] = {
-#ifdef TARGET_BOARD_PLATFORM_SOFIA3GR
+#if defined(TARGET_BOARD_PLATFORM_SOFIA3GR) || defined(TARGET_BOARD_PLATFORM_RK3288)
 	{ "ro.boot.serialno", "ro.serialno", "", },
 #endif
         { "ro.boot.mode",       "ro.bootmode",   "unknown", },
