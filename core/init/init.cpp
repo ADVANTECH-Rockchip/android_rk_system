@@ -71,6 +71,8 @@ static int property_triggers_enabled = 0;
 
 static char bootmode[32];
 static char hardware[32];
+static char boardversion[32];
+static char osversion[32];
 static char qemu[32];
 
 static struct action *cur_action = NULL;
@@ -852,8 +854,12 @@ static void export_kernel_boot_props() {
     char tmp[PROP_VALUE_MAX];
     int ret;
     char cmdline[1024];
+    char board[128];
     char* s1;
     char* s2;
+	char *ptr;
+	char *buff;
+	int i;
 
     struct {
         const char *src_prop;
@@ -908,6 +914,30 @@ static void export_kernel_boot_props() {
     if (ret)
         strlcpy(hardware, tmp, sizeof(hardware));
     property_set("ro.hardware", hardware);
+
+    /* get board_name board_version os_version */
+    proc_read( "/proc/board", board, sizeof(board) );
+    buff = board;
+	ptr = strsep(&buff, " ");
+	i = 0;
+	while (ptr != NULL) {
+		int len = strlen(ptr);
+		if(ptr[len-1] == '\n')
+		{
+			len--;
+			ptr[len] = 0;
+		}
+		if (i == 1) {
+			strlcpy(osversion,ptr,sizeof(osversion));
+			property_set("ro.setting.board_version", osversion);
+		}
+		if (i == 2) {
+			strlcpy(boardversion,ptr,sizeof(boardversion));
+			property_set("ro.setting.os_version", boardversion);
+		}
+		ptr = strsep(&buff, " ");
+		i++;
+	}
 
     symlink_fstab();
 }
@@ -998,6 +1028,7 @@ static selinux_enforcing_status selinux_status_from_cmdline() {
 
 static bool selinux_is_disabled(void)
 {
+	return false;
     if (ALLOW_DISABLE_SELINUX) {
         if (access("/sys/fs/selinux", F_OK) != 0) {
             // SELinux is not compiled into the kernel, or has been disabled
