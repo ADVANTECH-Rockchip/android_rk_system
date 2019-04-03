@@ -855,6 +855,7 @@ static void export_kernel_boot_props() {
     int ret;
     char cmdline[1024];
     char board[128];
+    char value[16]={"AKS00000000"};
     char* s1;
     char* s2;
 	char *ptr;
@@ -928,12 +929,14 @@ static void export_kernel_boot_props() {
 			ptr[len] = 0;
 		}
 		if (i == 1) {
-			strlcpy(osversion,ptr,sizeof(osversion));
-			property_set("ro.setting.board_version", osversion);
+			strlcpy(boardversion,ptr,sizeof(boardversion));
+			if(!strstr(boardversion,value)){
+			    property_set("ro.setting.board_version", boardversion);
+			}
 		}
 		if (i == 2) {
-			strlcpy(boardversion,ptr,sizeof(boardversion));
-			property_set("ro.setting.os_version", boardversion);
+			strlcpy(osversion,ptr,sizeof(osversion));
+			property_set("ro.setting.os_version", osversion);
 		}
 		ptr = strsep(&buff, " ");
 		i++;
