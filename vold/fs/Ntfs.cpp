@@ -61,7 +61,7 @@ int Ntfs::check(const char *fsPath) {
     const char *args[4];
     /* we first use -n to do ntfs detection */
     args[0] = NTFS_CHECK_PATH;
-    args[1] = "-n";
+    args[1] = "-d";
     args[2] = fsPath;
     args[3] = NULL;
 
@@ -72,6 +72,7 @@ int Ntfs::check(const char *fsPath) {
         return -1;
     }
 
+#if 0
     SLOGI("Ntfs filesystem existed");
 
     /* do the real fix */
@@ -86,6 +87,7 @@ int Ntfs::check(const char *fsPath) {
         SLOGE("Filesystem check failed (unknown exit code %d)", rc);
         return -1;
     }
+#endif
 
     SLOGI("Ntfs filesystem check completed OK");
     return 0;
