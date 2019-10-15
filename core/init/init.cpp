@@ -521,6 +521,12 @@ static void export_kernel_boot_props() {
     char cmdline[1024];
     char* s1;
     char* s3;
+    char* sPrmryLVDS;
+    char* sPrmryeDP;
+    char* sPrmryHDMI;
+    char* sExtendLVDS;
+    char* sExtendeDP;
+    char* sExtendHDMI;
 
     struct {
         const char *src_prop;
@@ -538,6 +544,31 @@ static void export_kernel_boot_props() {
     proc_read( "/proc/cmdline", cmdline, sizeof(cmdline) );
     s1 = strstr(cmdline, STORAGE_MEDIA_EMMC);
     s3 = strstr(cmdline, "androidboot.oem_unlocked=1");
+    sPrmryLVDS = strstr(cmdline, "prmry_screen=lvds-");
+    sPrmryeDP = strstr(cmdline, "prmry_screen=edp-");
+    sPrmryHDMI = strstr(cmdline, "prmry_screen=hdmi-");
+    sExtendLVDS = strstr(cmdline, "extend_screen=lvds-");
+    sExtendeDP = strstr(cmdline, "extend_screen=edp-");
+    sExtendHDMI = strstr(cmdline, "extend_screen=hdmi-");
+
+    if (sPrmryLVDS != NULL) {
+	    property_set("sys.hwc.device.primary","LVDS");
+    }
+    if (sExtendLVDS != NULL) {
+	    property_set("sys.hwc.device.extend","LVDS");
+    }
+    if (sPrmryeDP != NULL) {
+	    property_set("sys.hwc.device.primary","eDP");
+    }
+    if (sExtendeDP != NULL) {
+	    property_set("sys.hwc.device.extend","eDP");
+    }
+    if (sPrmryHDMI != NULL) {
+	    property_set("sys.hwc.device.primary","HDMI-A");
+    }
+    if (sExtendHDMI != NULL) {
+	    property_set("sys.hwc.device.extend","HDMI-A");
+    }
 
     if (s3 == NULL){
 	    //oem_unlocked is 0 or not set.
