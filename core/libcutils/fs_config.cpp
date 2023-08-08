@@ -89,6 +89,7 @@ static const struct fs_path_config android_dirs[] = {
     { 00755, AID_ROOT,         AID_SHELL,        0, "system/vendor" },
     { 00755, AID_ROOT,         AID_SHELL,        0, "system/xbin" },
     { 00755, AID_ROOT,         AID_SHELL,        0, "vendor" },
+    { 00775, AID_ROOT,         AID_ROOT,         0, "var" },
     { 00755, AID_ROOT,         AID_ROOT,         0, 0 },
     // clang-format on
 };
